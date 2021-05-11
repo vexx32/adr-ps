@@ -204,3 +204,25 @@ function Get-Adr {
             )
     }
 }
+
+function Set-Adr {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
+        [int[]]
+        $Id,
+
+        [Parameter(Mandatory)]
+        [ValidateSet('Proposed', 'Accepted', 'Rejected', 'Superseded', 'Deprecated')]
+        [string]
+        $Status
+    )
+    process {
+        Get-Adr -Id $Id | ForEach-Object {
+            $adrText = Get-Content -Path $_.Path -Raw
+            $adrText -replace '(?<=## Status[\r\n\s]+)[a-z]+(?=[\r\n\s]+##)', $Status |
+                Set-Content -Path $_.Path -NoNewline
+            Get-Adr -Id $_.Id
+        }
+    }
+}
