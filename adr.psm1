@@ -155,7 +155,7 @@ function Get-Adr {
 
         # Filter ADRs retrieved by the state of the ADR.
         [Parameter()]
-        [ValidateSet('Pending', 'Accepted', 'Done')]
+        [ValidateSet('Proposed', 'Accepted', 'Rejected', 'Superseded', 'Deprecated')]
         $State
     )
     begin {
