@@ -158,15 +158,16 @@ function Get-Adr {
         [ValidateSet('Pending', 'Accepted', 'Done')]
         $State
     )
-    process {
+    begin {
         $filterParams = @{ Filter = '*.md' }
-
+    }
+    process {
         switch ($PSCmdlet.ParameterSetName) {
             'Name' {
-                $filterParams['Include'] = "*-$Name.md"
+                $filterParams['Include'] = $Name | ForEach-Object { "*-$_.md" }
             }
             'Id' {
-                $filterParams['Include'] = "$($Id.ToString('0000'))-*.md"
+                $filterParams['Include'] = $Id | ForEach-Object { "$($_.ToString('0000'))-*.md" }
             }
         }
 
@@ -199,7 +200,7 @@ function Get-Adr {
                         }
                     }
                 }
-                'FullName'
+                @{ Name = 'Path'; Expression = 'FullName' }
             )
     }
 }
