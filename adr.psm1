@@ -90,27 +90,23 @@ function New-Adr {
         # The title of the new ADR.
         [Parameter(Mandatory)]
         [string]
-        $Title,
-
-        # Path to the ADR decision log folder.
-        [Parameter()]
-        [string]
-        $Path
+        $Title
     )
 
     $adrPath = Get-AdrLog
-	$latestFile = Get-ChildItem -LiteralPath $adrPath.FullName -Filter "*.md" -Name -File |
+	$latestFile = Get-ChildItem -LiteralPath $adrPath.FullName -Filter "*.md" -File |
         Where-Object Name -match '^[0-9]+-' |
         Sort-Object -Descending |
         Select-Object -First 1
 
-	$nextSequenceNum = if ($latestFile) {
-        $nextSequenceInt = [int]($latestFile.Name -split '-')[0] + 1
-        $nextSequenceInt.ToString("0000")
+    $nextSequenceInt = if ($latestFile) {
+        [int]($latestFile.Name -split '-')[0] + 1
 	}
     else {
-        "0001"
+        1
     }
+
+    $nextSequenceNum = $nextSequenceInt.ToString("0000")
 
 	$slugifiedTitle = $title.ToLower().Replace(" ","-")
 	$datePosted = Get-Date -Format "yyyy-MM-dd"
