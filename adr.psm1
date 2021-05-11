@@ -4,7 +4,7 @@ function Get-AdrLog {
     [CmdletBinding()]
     param()
 
-    $script:AdrLogFolder
+    Get-Item -LiteralPath $script:AdrLogFolder
 }
 
 function Set-AdrLog {
@@ -95,7 +95,7 @@ function New-Adr {
     )
 
     $adrPath = Get-AdrLog
-	$latestFile = Get-ChildItem -Path $adrPath -Filter "*.md" -Name -File |
+	$latestFile = Get-ChildItem -LiteralPath $adrPath.FullName -Filter "*.md" -Name -File |
         Where-Object Name -match '^[0-9]+-' |
         Sort-Object -Descending |
         Select-Object -First 1
