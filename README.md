@@ -53,6 +53,18 @@ The default destination directory is `doc/adr`.
      4 My New Adr                    Unknown  /Users/joel/repos/Github/adr-ps/doc/adr/0004-my-new-adr.md
     ```
 
+1. Update ADR status
+
+    ```powershell
+    Set-Adr -Id 4 -Status Rejected
+    ```
+
+    ```code
+    Id Name                          Status   Path
+    -- ----                          ------   ----
+     4 My New Adr                    Rejected /Users/joel/repos/Github/adr-ps/doc/adr/0004-my-new-adr.md
+    ```
+
 1. Help
 
     ```powershell

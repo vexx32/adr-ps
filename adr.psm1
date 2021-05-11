@@ -1,4 +1,5 @@
 $script:AdrLogFolder = "doc/adr"
+$script:AdrDateFormat = "yyyy-MM-dd"
 
 function Get-AdrLog {
     <#
@@ -109,7 +110,7 @@ function New-Adr {
     $nextSequenceNum = $nextSequenceInt.ToString("0000")
 
 	$slugifiedTitle = $title.ToLower().Replace(" ","-")
-	$datePosted = Get-Date -Format "yyyy-MM-dd"
+    $datePosted = Get-Date -Format $script:AdrDateFormat
 
     $template = Get-Content -Path "$PSScriptRoot/templates/ADR-Template.md"
     $replacementTokens = @(
@@ -206,12 +207,18 @@ function Get-Adr {
 }
 
 function Set-Adr {
+    <#
+        .SYNOPSIS
+        Updates the status of an existing ADR by ID.
+    #>
     [CmdletBinding()]
     param(
+        # ID(s) of the ADR(s) to update the status of.
         [Parameter(Mandatory, ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [int[]]
         $Id,
 
+        # The status to update the ADR(s) with.
         [Parameter(Mandatory)]
         [ValidateSet('Proposed', 'Accepted', 'Rejected', 'Superseded', 'Deprecated')]
         [string]
