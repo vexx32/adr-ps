@@ -192,9 +192,3 @@ function Get-Adr {
             )
     }
 }
-
-$members = @{
-    Function = 'Start-AdrLog', 'Get-AdrLog', 'New-Adr', 'Get-Adr'
-    Alias    = 'Adr-New', 'Adr-Init'
-}
-Export-ModuleMember @members
