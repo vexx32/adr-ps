@@ -1,6 +1,10 @@
 $script:AdrLogFolder = "doc/adr"
 
 function Get-AdrLog {
+    <#
+        .SYNOPSIS
+        Gets the current ADR log folder.
+    #>
     [CmdletBinding()]
     param()
 
@@ -130,19 +134,30 @@ function New-Adr {
 }
 
 function Get-Adr {
+    <#
+        .SYNOPSIS
+        Gets ADRs from the current ADR log.
+
+        .DESCRIPTION
+        Gets one or more ADRs from the current ADR log folder, displaying its Id, Status, Name, and Path.
+        ADRs can be filtered by Name, ID, and State.
+    #>
     [CmdletBinding(DefaultParameterSetName = 'Name')]
     param(
+        # Name(s) of the ADR to look for. Accepts wildcard patterns.
         [Parameter(ParameterSetName = 'Name', ValueFromPipeline, ValueFromPipelineByPropertyName)]
         [SupportsWildcards()]
         [ValidateNotNullOrEmpty()]
         [string[]]
         $Name = '*',
 
+        # Id(s) of the ADRs to look for.
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [ValidateRange(1, 9999)]
-        [int]
+        [int[]]
         $Id,
 
+        # Filter ADRs retrieved by the state of the ADR.
         [Parameter()]
         [ValidateSet('Pending', 'Accepted', 'Done')]
         $State
