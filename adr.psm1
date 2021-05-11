@@ -105,7 +105,7 @@ function New-Adr {
         $nextSequenceInt.ToString("0000")
 	}
     else {
-        "0000"
+        "0001"
     }
 
 	$slugifiedTitle = $title.ToLower().Replace(" ","-")
