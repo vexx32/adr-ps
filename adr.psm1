@@ -5,6 +5,16 @@ function Get-AdrLog {
     <#
         .SYNOPSIS
         Gets the current ADR log folder.
+
+        .EXAMPLE
+        PS> Get-AdrLog
+
+            Directory: /example/folder/adr-ps/doc
+
+        Mode                 LastWriteTime         Length Name
+        ----                 -------------         ------ ----
+        d----           5/11/2021  4:57 PM                adr
+
     #>
     [CmdletBinding()]
     param()
@@ -74,7 +84,7 @@ function Start-AdrLog {
         }
 	}
 
-    Get-Item -Path $adrPath
+    Get-AdrLog
 }
 
 function New-Adr {
@@ -85,6 +95,13 @@ function New-Adr {
         .DESCRIPTION
         Creates a new ADR file in the decision log with today's date and the
         next sequential number in the log.
+
+        .EXAMPLE
+        PS> New-Adr -Title "My New Adr"
+
+        Id Name       Status  Path
+        -- ----       ------  ----
+         4 My New Adr Unknown /Users/joel/repos/Github/adr-ps/doc/adr/0004-my-new-adr.md
     #>
     [Alias('Adr-New')]
     param(
@@ -138,6 +155,16 @@ function Get-Adr {
         .DESCRIPTION
         Gets one or more ADRs from the current ADR log folder, displaying its Id, Status, Name, and Path.
         ADRs can be filtered by Name, ID, and State.
+
+        .EXAMPLE
+        PS> Get-Adr
+
+        Id Name                          Status   Path
+        -- ----                          ------   ----
+         1 Record Architecture Decisions Accepted /Users/joel/repos/Github/adr-ps/doc/adr/0001-record-architecture-decisions.md
+         2 Implement As Powershell       Accepted /Users/joel/repos/Github/adr-ps/doc/adr/0002-implement-as-powershell.md
+         3 Use Powershell Approved Verbs Accepted /Users/joel/repos/Github/adr-ps/doc/adr/0003-use-powershell-approved-verbs.md
+         4 My New Adr                    Unknown  /Users/joel/repos/Github/adr-ps/doc/adr/0004-my-new-adr.md
     #>
     [CmdletBinding(DefaultParameterSetName = 'Name')]
     param(
@@ -210,6 +237,13 @@ function Set-Adr {
     <#
         .SYNOPSIS
         Updates the status of an existing ADR by ID.
+
+        .EXAMPLE
+        PS> Set-Adr -Id 4 -Status Rejected
+
+        Id Name                          Status   Path
+        -- ----                          ------   ----
+         4 My New Adr                    Rejected /Users/joel/repos/Github/adr-ps/doc/adr/0004-my-new-adr.md
     #>
     [CmdletBinding()]
     param(
