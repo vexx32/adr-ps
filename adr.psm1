@@ -126,11 +126,75 @@ function New-Adr {
     $newAdrPath = "${adrPath}/${nextSequenceNum}-${slugifiedTitle}.md"
     $newAdr | Set-Content -Path $newAdrPath
 
-    Get-Item -Path $newAdrPath
+    Get-Adr -Id $nextSequenceInt
+}
+
+function Get-Adr {
+    [CmdletBinding(DefaultParameterSetName = 'Name')]
+    param(
+        [Parameter(ParameterSetName = 'Name', ValueFromPipeline, ValueFromPipelineByPropertyName)]
+        [SupportsWildcards()]
+        [ValidateNotNullOrEmpty()]
+        [string[]]
+        $Name = '*',
+
+        [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
+        [ValidateRange(1, 9999)]
+        [int]
+        $Id,
+
+        [Parameter()]
+        [ValidateSet('Pending', 'Accepted', 'Done')]
+        $State
+    )
+    process {
+        $filterParams = @{ Filter = '*.md' }
+
+        switch ($PSCmdlet.ParameterSetName) {
+            'Name' {
+                $filterParams['Include'] = "*-$Name.md"
+            }
+            'Id' {
+                $filterParams['Include'] = "$($Id.ToString('0000'))-*.md"
+            }
+        }
+
+        Get-AdrLog |
+            Get-ChildItem @filterParams |
+            Where-Object {
+                $_.Name -Match '^[0-9]+-' -and (
+                    -not $State -or
+                    (Get-Content -Raw -LiteralPath $_.FullName) -match "## Status[\r\n\s]+$State"
+                )
+            } |
+            Select-Object -Property @(
+                @{ Name = 'Id'; Expression = { $_.BaseName -replace '[^0-9]' -as [int] } }
+                @{
+                    Name = 'Name'
+                    Expression = {
+                        $name = ($_.BaseName -replace '[0-9]' -replace '-', ' ').Trim()
+                        [cultureinfo]::CurrentCulture.TextInfo.ToTitleCase($name)
+                    }
+                }
+                @{
+                    Name = 'Status'
+                    Expression = {
+                        $adrText = Get-Content -Raw -LiteralPath $_.FullName
+                        if ($adrText -match "## Status[\r\n\s]+(?<Status>[a-z]+)") {
+                            $matches.Status
+                        }
+                        else {
+                            'Unknown'
+                        }
+                    }
+                }
+                'FullName'
+            )
+    }
 }
 
 $members = @{
-    Function = 'Start-AdrLog', 'Get-AdrLog', 'New-Adr'
+    Function = 'Start-AdrLog', 'Get-AdrLog', 'New-Adr', 'Get-Adr'
     Alias    = 'Adr-New', 'Adr-Init'
 }
 Export-ModuleMember @members
