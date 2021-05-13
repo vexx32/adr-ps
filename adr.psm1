@@ -9,7 +9,7 @@ $LoadFolders = @(
 )
 
 $LoadFolders |
-    Get-ChildIitem -Recurse -File -Include '*.ps1' |
+    Get-ChildItem -Recurse -File -Include '*.ps1' |
     ForEach-Object {
         . $_.FullName
     }
