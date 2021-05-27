@@ -40,7 +40,7 @@ function New-Adr {
     $slugifiedTitle = $title.ToLower().Replace(" ", "-")
     $datePosted = Get-Date -Format $script:AdrDateFormat
 
-    $template = Get-Content -Path "$PSScriptRoot/templates/ADR-Template.md"
+    $template = Get-Content -Path "$script:ModuleRoot/templates/ADR-Template.md"
     $replacementTokens = @(
         @{ Token = '{{NUM}}'; Value = $nextSequenceNum }
         @{ Token = '{{DATE}}'; Value = $datePosted }

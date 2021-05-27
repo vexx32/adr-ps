@@ -33,7 +33,7 @@ function Start-AdrLog {
     if (-not (Test-Path -Path $adrPath)) {
         New-Item -ItemType Directory -Force -Path $adrPath
 
-        $readmePath = "$PSScriptRoot/templates/ADR-Readme.md"
+        $readmePath = "$script:ModuleRoot/templates/ADR-Readme.md"
         if (-not (Test-Path $readmePath)) {
             Copy-Item -Path $readmePath -Destination "$adrPath/README.md"
         }
