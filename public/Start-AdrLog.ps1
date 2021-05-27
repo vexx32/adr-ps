@@ -31,12 +31,10 @@ function Start-AdrLog {
         Set-AdrLog -PassThru
 
     if (-not (Test-Path -Path $adrPath)) {
-        New-Item -ItemType Directory -Force -Path $adrPath
+        New-Item -ItemType Directory -Force -Path $adrPath > $null
 
         $readmePath = "$script:ModuleRoot/templates/ADR-Readme.md"
-        if (-not (Test-Path $readmePath)) {
-            Copy-Item -Path $readmePath -Destination "$adrPath/README.md"
-        }
+        Copy-Item -Path $readmePath -Destination "$adrPath/README.md"
     }
 
     Get-AdrLog
